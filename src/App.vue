@@ -1,8 +1,6 @@
 <template>
   <div id="app">
-    <!-- <img width="25%" src="./assets/logo.png"> -->
     <router-view keep-alive></router-view>
-    <p>this is app.vue</p>
   </div>
 </template>
 

@@ -22,7 +22,7 @@ export default {
     nextPage() {
       setTimeout(() => {
         this.$router.push({ path: "/RoomComponent" });
-      }, 3000);
+      }, 2000);
     }
   },
   components: {

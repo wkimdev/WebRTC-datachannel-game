@@ -1,34 +1,34 @@
-(function() {
+(function () {
   // Define "global" variables
 
-  var connectButton = null;
-  var disconnectButton = null;
-  var sendButton = null;
-  var messageInputBox = null;
-  var receiveBox = null;
+  let connectButton = null;
+  let disconnectButton = null;
+  let sendButton = null;
+  let messageInputBox = null;
+  let receiveBox = null;
 
-  var localConnection = null; // RTCPeerConnection for our "local" connection
-  var remoteConnection = null; // RTCPeerConnection for the "remote"
+  let localConnection = null; // RTCPeerConnection for our "local" connection
+  let remoteConnection = null; // RTCPeerConnection for the "remote"
 
-  var sendChannel = null; // RTCDataChannel connectButton the local (sender)
-  var receiveChannel = null; // RTCDataChannel for the remote (receiver)
+  let sendChannel = null; // RTCDataChannel connectButton the local (sender)
+  let receiveChannel = null; // RTCDataChannel for the remote (receiver)
 
   // Functions
 
   // Set things up, connect event listeners, etc.
 
   function startup() {
-    connectButton = document.getElementById("connectButton");
-    disconnectButton = document.getElementById("disconnectButton");
-    sendButton = document.getElementById("sendButton");
-    messageInputBox = document.getElementById("message");
-    receiveBox = document.getElementById("receivebox");
+    connectButton = document.getElementById('connectButton');
+    disconnectButton = document.getElementById('disconnectButton');
+    sendButton = document.getElementById('sendButton');
+    messageInputBox = document.getElementById('message');
+    receiveBox = document.getElementById('receivebox');
 
     // Set event listeners for user interface widgets
 
-    connectButton.addEventListener("click", connectPeers, false);
-    disconnectButton.addEventListener("click", disconnectPeers, false);
-    sendButton.addEventListener("click", sendMessage, false);
+    connectButton.addEventListener('click', connectPeers, false);
+    disconnectButton.addEventListener('click', disconnectPeers, false);
+    sendButton.addEventListener('click', sendMessage, false);
   }
 
   // Connect the two peers. Normally you look for and connect to a remote
@@ -41,7 +41,7 @@
 
     // Create the data channel and establish its event listeners
     // 방 생성
-    sendChannel = localConnection.createDataChannel("sendChannel");
+    sendChannel = localConnection.createDataChannel('sendChannel');
     sendChannel.onopen = handleSendChannelStatusChange;
     sendChannel.onclose = handleSendChannelStatusChange;
 
@@ -70,12 +70,12 @@
       .createOffer()
       .then(offer => localConnection.setLocalDescription(offer))
       .then(() =>
-        remoteConnection.setRemoteDescription(localConnection.localDescription)
+        remoteConnection.setRemoteDescription(localConnection.localDescription),
       )
       .then(() => remoteConnection.createAnswer())
       .then(answer => remoteConnection.setLocalDescription(answer))
       .then(() =>
-        localConnection.setRemoteDescription(remoteConnection.localDescription)
+        localConnection.setRemoteDescription(remoteConnection.localDescription),
       )
       .catch(handleCreateDescriptionError);
   }
@@ -86,7 +86,7 @@
   // both the same way.
 
   function handleCreateDescriptionError(error) {
-    console.log("Unable to create an offer: " + error.toString());
+    console.log(`Unable to create an offer: ${  error.toString()}`);
   }
 
   // Handle successful addition of the ICE candidate
@@ -106,20 +106,20 @@
   // Handle an error that occurs during addition of ICE candidate.
 
   function handleAddCandidateError() {
-    console.log("Oh noes! addICECandidate failed!");
+    console.log('Oh noes! addICECandidate failed!');
   }
 
   // Handles clicks on the "Send" button by transmitting
   // a message to the remote peer.
 
   function sendMessage() {
-    var message = messageInputBox.value;
+    const message = messageInputBox.value;
     sendChannel.send(message);
 
     // Clear the input box and re-focus it, so that we're
     // ready for the next message.
 
-    messageInputBox.value = "";
+    messageInputBox.value = '';
     messageInputBox.focus();
   }
 
@@ -129,9 +129,9 @@
 
   function handleSendChannelStatusChange(event) {
     if (sendChannel) {
-      var state = sendChannel.readyState;
+      const state = sendChannel.readyState;
 
-      if (state === "open") {
+      if (state === 'open') {
         messageInputBox.disabled = false;
         messageInputBox.focus();
         sendButton.disabled = false;
@@ -160,20 +160,20 @@
   // These are the data messages sent by the sending channel.
 
   function handleReceiveMessage(event) {
-    var el = document.createElement("p");
-    //var txtNode = document.createTextNode(event.data);
-    var txtNode = "";
+    const el = document.createElement('p');
+    // var txtNode = document.createTextNode(event.data);
+    let txtNode = '';
     console.log(event.data); // 가위 바위 보
-    var rps_value = "";
+    let rps_value = '';
 
     switch (event.data) {
-      case "가위":
+      case '가위':
         rps_value = 0;
         break;
-      case "바위":
+      case '바위':
         rps_value = 1;
         break;
-      case "보":
+      case '보':
         rps_value = 2;
         break;
       default:
@@ -181,16 +181,14 @@
         return;
     }
 
-    var computer = Math.floor(Math.random() * 3); //0,1,2가 발생
+    const computer = Math.floor(Math.random() * 3); // 0,1,2가 발생
 
     if (rps_value == computer) {
-      console.log("비겼습니다");
+      console.log('비겼습니다');
+    } else if ((rps_value + 1) % 3 == computer) {
+      txtNode = '졌습니다';
     } else {
-      if ((rps_value + 1) % 3 == computer) {
-        txtNode = "졌습니다";
-      } else {
-        txtNode = "이겼습니다";
-      }
+      txtNode = '이겼습니다';
     }
 
     // reponse 승 패
@@ -203,7 +201,7 @@
   function handleReceiveChannelStatusChange(event) {
     if (receiveChannel) {
       console.log(
-        "Receive channel's status has changed to " + receiveChannel.readyState
+        `Receive channel's status has changed to ${receiveChannel.readyState}`,
       );
     }
 
@@ -215,6 +213,7 @@
   // Also update the UI to reflect the disconnected status.
 
   function disconnectPeers() {
+    console.log('test!!!!!!!!!!!');
     // Close the RTCDataChannels if they're open.
 
     sendChannel.close();
@@ -236,12 +235,12 @@
     disconnectButton.disabled = true;
     sendButton.disabled = true;
 
-    messageInputBox.value = "";
+    messageInputBox.value = '';
     messageInputBox.disabled = true;
   }
 
   // Set up an event listener which will run the startup
   // function once the page is done loading.
 
-  window.addEventListener("load", startup, false);
-})();
+  window.addEventListener('load', startup, false);
+}());
