@@ -1,10 +1,12 @@
-# test-project
+# Simple RTCDataChannel Game
+
+- WebRTC datachannel을 이용한 간단한 가위바위보 게임입니다.
 
 > A Vue.js project
 
 ## Build Setup
 
-``` bash
+```bash
 # install dependencies
 npm install
 
